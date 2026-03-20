@@ -77,6 +77,30 @@ function BookAppointment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ID: 0 - Validation for past date/time
+    const selectedDate = new Date(form.date);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+    // Reset times to compare just dates
+    const selectedDateOnly = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+
+    if (selectedDateOnly < today) {
+      alert("Cannot book appointment in the past.");
+      return;
+    }
+
+    if (selectedDateOnly.getTime() === today.getTime()) {
+      const [hours, minutes] = form.time.split(':');
+      const selectedTime = new Date();
+      selectedTime.setHours(hours, minutes, 0, 0);
+
+      if (selectedTime < now) {
+        alert("Cannot book appointment for a past time today.");
+        return;
+      }
+    }
+
     await api.post("/appointments/book", {
       patient: user.id,
       doctor: form.doctor,
@@ -175,7 +199,7 @@ function BookAppointment() {
                   <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white shadow-sm flex-shrink-0">
                     {selectedDoctor.profilePicture ? (
                       <img
-                        src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${selectedDoctor.profilePicture}`}
+                        src={`${import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || "http://localhost:5000")}${selectedDoctor.profilePicture}`}
                         alt={selectedDoctor.name}
                         className="w-full h-full object-cover"
                       />
@@ -227,6 +251,7 @@ function BookAppointment() {
                 type="date"
                 name="date"
                 required
+                min={new Date().toISOString().split('T')[0]}
                 onChange={(e) => setForm({ ...form, date: e.target.value })}
                 className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
               />

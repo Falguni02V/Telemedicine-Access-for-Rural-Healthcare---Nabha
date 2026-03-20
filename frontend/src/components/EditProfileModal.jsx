@@ -22,7 +22,7 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdate }) {
                 workingExperience: user.workingExperience || ""
             });
             if (user.profilePicture) {
-                setPreviewUrl(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.profilePicture}`);
+                setPreviewUrl(`${import.meta.env.VITE_API_URL || (import.meta.env.VITE_API_URL || "http://localhost:5000")}${user.profilePicture}`);
             }
         }
     }, [user]);
@@ -161,6 +161,7 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdate }) {
                         <input
                             name="contactNumber"
                             type="tel"
+                            required
                             value={form.contactNumber}
                             onChange={handleChange}
                             placeholder="Enter your contact number"
@@ -176,6 +177,7 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdate }) {
                         <input
                             name="degreeQualification"
                             type="text"
+                            required
                             value={form.degreeQualification}
                             onChange={handleChange}
                             placeholder="e.g., MBBS, MD, MS"
@@ -191,6 +193,7 @@ function EditProfileModal({ isOpen, onClose, user, onProfileUpdate }) {
                         <input
                             name="workingExperience"
                             type="text"
+                            required
                             value={form.workingExperience}
                             onChange={handleChange}
                             placeholder="e.g., 10 years"
