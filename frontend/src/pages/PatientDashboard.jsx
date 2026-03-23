@@ -219,7 +219,7 @@ function PatientDashboard() {
                     onClick={() => {
                       const token = localStorage.getItem("token");
                       window.open(
-                        `http://localhost:5000/api/appointments/prescription-pdf/${a._id}?token=${token}`
+                        `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/appointments/prescription-pdf/${a._id}?token=${token}`
                       );
                     }}
                     className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
